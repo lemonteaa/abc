@@ -17,9 +17,11 @@
   {:enter (fn [ctx] (update-in ctx [:request :number] (fnil + 0) number))})
 
 ; We should insert the GraphQL endpoints here
+; TODO: graphiql asset relative path issue?
 (def routes
   ["/api"
-   {:interceptors [(interceptor 1)]}
+   ["/graphql-q" {:post {:interceptors [(p2/default-interceptors poc-schema nil)]}}]
+   ["/graphql-ide" {:get {:handler (p2/graphiql-ide-handler nil)}}]
 
    ["/number"
     {:interceptors [(interceptor 10)]
