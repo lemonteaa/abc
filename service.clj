@@ -1,5 +1,5 @@
-(require '[xtdb.api :as xt])
-
+(ns abc.service
+  (:require [xtdb.api :as xt]))
 
 
 (def node (xt/start-node {}))
