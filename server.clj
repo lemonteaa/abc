@@ -9,11 +9,14 @@
   (:require [io.pedestal.http :as server]
             [reitit.pedestal :as pedestal]
             [reitit.http :as http]
-            [reitit.ring :as ring]))
+            [reitit.ring :as ring]
+            [com.walmartlabs.lacinia.pedestal2 :as p2]
+            [com.walmartlabs.lacinia.pedestal :refer [inject]]))
 
 (defn interceptor [number]
   {:enter (fn [ctx] (update-in ctx [:request :number] (fnil + 0) number))})
 
+; We should insert the GraphQL endpoints here
 (def routes
   ["/api"
    {:interceptors [(interceptor 1)]}
@@ -24,6 +27,18 @@
            :handler (fn [req]
                       {:status 200
                        :body (select-keys req [:number])})}}]])
+
+
+; Other reference:
+; https://walmartlabs.github.io/apidocs/lacinia-pedestal/com.walmartlabs.lacinia.pedestal2.html
+; https://lacinia-pedestal.readthedocs.io/en/latest/interceptors.html
+
+; For integration with lacinia-pedestal, see
+; https://github.com/walmartlabs/lacinia-pedestal/blob/master/src/com/walmartlabs/lacinia/pedestal2.clj#L326
+; interceptors (default-interceptors compiled-schema app-context options)
+;        routes (into #{[api-path :post interceptors :route-name ::graphql-api]
+;                       [ide-path :get (graphiql-ide-handler options) :route-name ::graphiql-ide]}
+;                     (graphiql-asset-routes asset-path))
 
 (-> {::server/type :jetty
      ::server/port 3000

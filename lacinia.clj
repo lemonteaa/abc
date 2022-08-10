@@ -23,11 +23,12 @@
        :home_planet "Socorro"
        :appears_in ["EMPIRE" "JEDI"]})))
 
+(def resolvers {:get-hero get-hero
+                :get-droid (constantly {})})
 
-(def star-wars-schema
+(def poc-schema
   (-> schema-name
       slurp
       edn/read-string
-      (attach-resolvers {:get-hero get-hero
-                         :get-droid (constantly {})})
+      (attach-resolvers resolvers)
       schema/compile))
