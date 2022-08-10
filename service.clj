@@ -1,6 +1,8 @@
 (ns abc.service
-  (:require [xtdb.api :as xt]))
-
+  (:require [xtdb.api :as xt]
+            [malli.core :as m]))
+; [malli.dev :as mdev]
+; [malli.experimental :as mx]
 
 (def node (xt/start-node {}))
 
@@ -49,3 +51,21 @@
 
 (assert (not= true (m/validate my-schema (keywordize-keys {"firstName" "John", "lastName" 1, "age" 21}))))
 
+; Schema validation as an interceptor?
+
+(defn schema-validation-interceptor [malli-schema]
+  (if (not (m/schema? malli-schema))
+    (throw (ex-info "Invalid Malli Schema."))
+    {:enter (fn [ctx]
+                (do
+                  (assert (= true (m/validate malli-schema (keywordize-keys (:request ctx)))))
+                  ctx))}))
+
+; Our application specific code below:
+
+
+(defn add-person [req]
+)
+
+(defn get-person [req]
+)

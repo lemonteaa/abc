@@ -23,6 +23,11 @@
    ["/graphql-q" {:post {:interceptors [(p2/default-interceptors poc-schema nil)]}}]
    ["/graphql-ide" {:get {:handler (p2/graphiql-ide-handler nil)}}]
 
+   ["/person"
+    {:post {:interceptors [(schema-validation-interceptor my-schema)]
+            :handler add-person}
+     :get  {:handler get-person}}]
+
    ["/number"
     {:interceptors [(interceptor 10)]
      :get {:interceptors [(interceptor 100)]
