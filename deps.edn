@@ -1,0 +1,3 @@
+{:deps
+ {org.hkupty/malli {:git/url "https://github.com/hkupty/malli.git" 
+                    :sha "9f380a73b5e07c11efa3e7ef21a256dfb066b7e8"}}}

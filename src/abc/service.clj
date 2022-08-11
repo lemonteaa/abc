@@ -1,6 +1,7 @@
 (ns abc.service
   (:require [xtdb.api :as xt]
-            ;[malli.core :as m]
+            [malli.core :as m]
+            [malli.json-schema.parse :refer [schema->malli]]
             ))
 ; [malli.dev :as mdev]
 ; [malli.experimental :as mx]
@@ -58,7 +59,7 @@
 
 (defn schema-validation-interceptor [malli-schema]
   (if (not (m/schema? malli-schema))
-    (throw (ex-info "Invalid Malli Schema."))
+    (throw (ex-info "Invalid Malli Schema." {}))
     {:enter (fn [ctx]
                 (do
                   (assert (= true (m/validate malli-schema (keywordize-keys (:request ctx)))))
