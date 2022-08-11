@@ -6,7 +6,8 @@
 (ns abc.lacinia
   (:require [clojure.edn :as edn]
             [com.walmartlabs.lacinia.util :refer [attach-resolvers]]
-            [com.walmartlabs.lacinia.schema :as schema]))
+            [com.walmartlabs.lacinia.schema :as schema]
+            [com.walmartlabs.lacinia :refer [execute]]))
 
 (def schema-name "lacinia-schema-sample.edn")
 
@@ -32,3 +33,7 @@
       edn/read-string
       (attach-resolvers resolvers)
       schema/compile))
+
+;; Testing graphQL standalone
+
+(execute poc-schema "{ hero { id name }}" nil nil)
