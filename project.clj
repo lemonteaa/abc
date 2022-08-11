@@ -18,7 +18,10 @@
                  [com.walmartlabs/lacinia-pedestal "1.1"]
                  [com.walmartlabs/lacinia "1.1"]
                  ; Fix for lacinia
-                 [io.aviso/pretty "1.1.1"]]
+                 [io.aviso/pretty "1.1.1"]
+                 
+                 ;Dependency Injection/Management
+                 [integrant "0.8.0"]]
   :main ^:skip-aot abc.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all

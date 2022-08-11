@@ -27,7 +27,7 @@
 (def resolvers {:get-hero get-hero
                 :get-droid (constantly {})})
 
-(def poc-schema
+(defn poc-schema []
   (-> schema-name
       slurp
       edn/read-string
@@ -36,4 +36,4 @@
 
 ;; Testing graphQL standalone
 
-(execute poc-schema "{ hero { id name }}" nil nil)
+;(execute poc-schema "{ hero { id name }}" nil nil)
