@@ -1,12 +1,14 @@
 (ns abc.di.components
   (:require [integrant.core :as ig]
-            [abc.lacinia :as lac]))
+            [abc.lacinia :as lac]
+            [com.walmartlabs.lacinia :refer [execute]]))
+
 
 (def config
   (ig/read-string (slurp "integrant-config.edn")))
 
-(defmethod ig/init-key :graphql/schema [_ _]
-  (lac/poc-schema))
+(defmethod ig/init-key :graphql/schema [_ {:keys [file]}]
+  (lac/poc-schema file lac/resolvers))
 
 ;{:adapter/jetty {:port 8080, :handler #ig/ref :handler/greet}
 ; :handler/greet {:name "Alice"}}
@@ -22,3 +24,7 @@
   (ig/init config))
 
 (ig/halt! system)
+
+(execute (:graphql/schema system) 
+         "{ hero { id name }}" nil nil)
+

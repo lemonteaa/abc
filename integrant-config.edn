@@ -1,1 +1,1 @@
-{:graphql/schema {}}
+{:graphql/schema {:file "lacinia-schema-sample.edn"}}

@@ -9,8 +9,6 @@
             [com.walmartlabs.lacinia.schema :as schema]
             [com.walmartlabs.lacinia :refer [execute]]))
 
-(def schema-name "lacinia-schema-sample.edn")
-
 
 (defn get-hero [context arguments value]
   (let [{:keys [episode]} arguments]
@@ -27,8 +25,8 @@
 (def resolvers {:get-hero get-hero
                 :get-droid (constantly {})})
 
-(defn poc-schema []
-  (-> schema-name
+(defn poc-schema [file-name resolvers]
+  (-> file-name
       slurp
       edn/read-string
       (attach-resolvers resolvers)
