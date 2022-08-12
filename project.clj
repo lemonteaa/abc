@@ -27,7 +27,9 @@
   :main ^:skip-aot abc.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
-                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}
+                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}
+             :prod {:resource-paths ["config/common" "config/prod"]}
+             :dev  {:resource-paths ["config/common" "config/dev"]}}
   :plugins [[lein-tools-deps "0.4.5"]]
   :middleware [lein-tools-deps.plugin/resolve-dependencies-with-deps-edn]
   :lein-tools-deps/config {:config-files [:install :user :project]})
