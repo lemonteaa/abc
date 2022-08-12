@@ -27,9 +27,10 @@
 
 ; We should insert the GraphQL endpoints here
 ; TODO: graphiql asset relative path issue?
-(defn make-reitit-routes [graphql-schema]
+(defn make-reitit-routes [graphql-schema db-node]
   ["/api"
-   ["/graphql-q" {:post {:interceptors (p2/default-interceptors graphql-schema nil)}}]
+   ["/graphql-q" {:post {:interceptors 
+                         (p2/default-interceptors graphql-schema {:system/db db-node})}}]
    ;["/graphql-ide" {:get {:handler (p2/graphiql-ide-handler nil)}}]
 
    ;["/person"

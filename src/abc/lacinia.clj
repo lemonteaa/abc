@@ -13,6 +13,7 @@
 
 (defn get-hero [context arguments value]
   (let [{:keys [episode]} arguments]
+    (println (:system/db context))
     (if (= episode :NEWHOPE)
       {:id 1000
        :name "Luke"

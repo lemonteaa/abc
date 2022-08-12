@@ -36,7 +36,7 @@
   (let [base-conf (edn/read-string (slurp (io/resource (:file base-conf))))]
     (server/create-and-start-server 
      base-conf 
-     (server/make-reitit-routes graphql-schema))))
+     (server/make-reitit-routes graphql-schema db))))
 
 (defmethod ig/halt-key! :server [_ server]
   (p-server/stop server))
