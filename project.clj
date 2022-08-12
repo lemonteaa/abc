@@ -14,16 +14,21 @@
                  ;; [io.pedestal/pedestal.tomcat "0.5.10"]]
                  [metosin/reitit-pedestal "0.5.18"]
                  [metosin/reitit "0.5.18"]
-                 
+
                  [com.walmartlabs/lacinia-pedestal "1.1"]
                  [com.walmartlabs/lacinia "1.1"]
                  ; Fix for lacinia
                  [io.aviso/pretty "1.1.1"]
-                 
+
                  ;Dependency Injection/Management
                  [integrant "0.8.0"]
-                 
-                 [org.clojure/data.json "2.4.0"]]
+
+                 [org.clojure/data.json "2.4.0"]
+
+                 [ch.qos.logback/logback-classic "1.2.3" :exclusions [org.slf4j/slf4j-api]]
+                 [org.slf4j/jul-to-slf4j "1.7.26"]
+                 [org.slf4j/jcl-over-slf4j "1.7.26"]
+                 [org.slf4j/log4j-over-slf4j "1.7.26"]]
   :main ^:skip-aot abc.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
