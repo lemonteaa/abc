@@ -1,5 +1,6 @@
 (ns abc.di.components
   (:require [integrant.core :as ig]
+            [clojure.java.io :as io]
             [abc.lacinia :as lac]
             [com.walmartlabs.lacinia :refer [execute]]
             [xtdb.api :as xt]
@@ -12,7 +13,7 @@
   (into {} (for [[k v] m] [k (f v)])))
 
 (def config
-  (ig/read-string (slurp "integrant-config.edn")))
+  (ig/read-string (slurp (io/resource "integrant-config.edn"))))
 
 (defmethod ig/init-key :graphql/schema [_ {:keys [file]}]
   (lac/poc-schema file lac/resolvers))
@@ -30,6 +31,7 @@
 (defmethod ig/init-key :api/schema [_ m]
   (fmap m (fn [file]
             (-> file
+                (io/resource)
                 (slurp)
                 (json/read-str)
                 (keywordize-keys)

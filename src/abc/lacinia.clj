@@ -5,6 +5,7 @@
 
 (ns abc.lacinia
   (:require [clojure.edn :as edn]
+            [clojure.java.io :as io]
             [com.walmartlabs.lacinia.util :refer [attach-resolvers]]
             [com.walmartlabs.lacinia.schema :as schema]
             [com.walmartlabs.lacinia :refer [execute]]))
@@ -27,6 +28,7 @@
 
 (defn poc-schema [file-name resolvers]
   (-> file-name
+      io/resource
       slurp
       edn/read-string
       (attach-resolvers resolvers)
