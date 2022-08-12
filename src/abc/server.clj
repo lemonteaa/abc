@@ -11,16 +11,25 @@
             [reitit.http :as http]
             [reitit.ring :as ring]
             [com.walmartlabs.lacinia.pedestal2 :as p2]
-            [com.walmartlabs.lacinia.pedestal :refer [inject]]))
+            [com.walmartlabs.lacinia.pedestal :refer [inject]]
+            [reitit.interceptor :as interceptor])
+  (:import (io.pedestal.interceptor Interceptor)))
 
 (defn interceptor [number]
   {:enter (fn [ctx] (update-in ctx [:request :number] (fnil + 0) number))})
 
+;; Using quickfix from https://github.com/metosin/reitit/issues/330
+;; "Adding Reitit.pedestal io.pedestal.interceptor.Interceptor support"
+(extend-protocol interceptor/IntoInterceptor
+  Interceptor
+  (into-interceptor [this data opts]
+    (interceptor/into-interceptor (into {} this) data opts)))
+
 ; We should insert the GraphQL endpoints here
 ; TODO: graphiql asset relative path issue?
-(def routes
+(defn make-reitit-routes [graphql-schema]
   ["/api"
-   ;["/graphql-q" {:post {:interceptors [(p2/default-interceptors poc-schema nil)]}}]
+   ["/graphql-q" {:post {:interceptors (p2/default-interceptors graphql-schema nil)}}]
    ;["/graphql-ide" {:get {:handler (p2/graphiql-ide-handler nil)}}]
 
    ;["/person"
@@ -49,10 +58,11 @@
 
 (defn create-and-start-server [base-conf routes]
   (-> base-conf
-    (server/default-interceptors)
+      (server/default-interceptors)
     ;; swap the reitit router
-    (pedestal/replace-last-interceptor
-      (pedestal/routing-interceptor (http/router routes)))
-    (server/dev-interceptors)
-    (server/create-server)
-    (server/start)))
+      (pedestal/replace-last-interceptor
+       (pedestal/routing-interceptor (http/router routes)))
+      (server/dev-interceptors)
+      (server/create-server)
+      (server/start)))
+

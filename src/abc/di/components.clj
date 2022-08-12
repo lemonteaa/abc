@@ -8,7 +8,9 @@
             [xtdb.api :as xt]
             [clojure.data.json :as json]
             [clojure.walk :refer (keywordize-keys)]
-            [malli.json-schema.parse :refer [schema->malli]]))
+            [malli.json-schema.parse :refer [schema->malli]]
+            [io.pedestal.http :as p-server]
+            [com.walmartlabs.lacinia.pedestal2 :as p2]))
 
 ; util
 (defn fmap [m f]
@@ -30,13 +32,14 @@
 ; 1) slurp return string only - to parse, further process or use other fn
 ; 2) ::name for namespaced keyword does auto-resolve - this obviously won't work in edn file, so be explicit there
 ; 3) pedestal server start/stop need to be careful
-(defmethod ig/init-key :server [_ {:keys [base-conf db]}]
+(defmethod ig/init-key :server [_ {:keys [base-conf db graphql-schema]}]
   (let [base-conf (edn/read-string (slurp (io/resource (:file base-conf))))]
-    (println base-conf)
-    (server/create-and-start-server base-conf server/routes)))
+    (server/create-and-start-server 
+     base-conf 
+     (server/make-reitit-routes graphql-schema))))
 
 (defmethod ig/halt-key! :server [_ server]
-  (io.pedestal.http/stop server))
+  (p-server/stop server))
 
 ; Modified from:
 ; Experimental code from PR
@@ -70,3 +73,8 @@
 
 (execute (:graphql/schema system) 
          "{ hero { id name }}" nil nil)
+
+
+
+(p2/default-interceptors (lac/poc-schema "lacinia-schema-sample.edn" lac/resolvers)
+                         nil)

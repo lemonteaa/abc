@@ -2,4 +2,5 @@
  :db/node {}
  :api/schema {:person "schemas/person.json"}
  :server {:base-conf {:file "pedestal-base-conf.edn"}
-          :db #ig/ref :db/node}}
+          :db #ig/ref :db/node
+          :graphql-schema #ig/ref :graphql/schema}}

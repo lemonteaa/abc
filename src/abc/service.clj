@@ -2,6 +2,7 @@
   (:require [xtdb.api :as xt]
             [malli.core :as m]
             [malli.json-schema.parse :refer [schema->malli]]
+            [clojure.walk :refer (keywordize-keys)]
             ))
 ; [malli.dev :as mdev]
 ; [malli.experimental :as mx]
@@ -10,21 +11,21 @@
 
 ; https://docs.xtdb.com/language-reference/1.21.0/datalog-transactions/
 ; TODO: listen to event to ensure indexer has run to this trans?
-(xt/submit-tx node [[::xt/put
-                     {:xt/id :dbpedia.resource/Pablo-Picasso 
-                      :first-name :Pablo
-                      :last-name :Picasso
-                      :born 1613
-                      :remark "A Man of Greatest Talent"}]])
+;(xt/submit-tx node [[::xt/put
+;                     {:xt/id :dbpedia.resource/Pablo-Picasso 
+;                      :first-name :Pablo
+;                      :last-name :Picasso
+;                      :born 1613
+;                      :remark "A Man of Greatest Talent"}]])
 
 ; https://docs.xtdb.com/language-reference/datalog-queries/
-(xt/q
- (xt/db node)
- '{:find [yr]
-   :where [[p1 :last-name n]
-            [p1 :born yr]]
-   :in [n]}
- :Picasso)
+;(xt/q
+; (xt/db node)
+; '{:find [yr]
+;   :where [[p1 :last-name n]
+;            [p1 :born yr]]
+;   :in [n]}
+; :Picasso)
 
 ;(.close node)
 
