@@ -1,1 +1,3 @@
-{:graphql/schema {:file "lacinia-schema-sample.edn"}}
+{:graphql/schema {:file "lacinia-schema-sample.edn"}
+ :db {}
+ :api/schema {:person "schemas/person.json"}}

@@ -21,7 +21,9 @@
                  [io.aviso/pretty "1.1.1"]
                  
                  ;Dependency Injection/Management
-                 [integrant "0.8.0"]]
+                 [integrant "0.8.0"]
+                 
+                 [org.clojure/data.json "2.4.0"]]
   :main ^:skip-aot abc.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
