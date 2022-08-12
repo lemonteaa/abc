@@ -23,6 +23,10 @@
 (defmethod ig/halt-key! :db [_ node]
   (.close node))
 
+; Modified from:
+; Experimental code from PR
+; https://github.com/metosin/malli/pull/211
+; Fork at hkupty:js-schema-to-malli
 (defmethod ig/init-key :api/schema [_ m]
   (fmap m (fn [file]
             (-> file
@@ -30,6 +34,12 @@
                 (json/read-str)
                 (keywordize-keys)
                 (schema->malli)))))
+
+;(m/schema? my-schema)
+;(m/form my-schema)
+;(assert (= true (m/validate my-schema (keywordize-keys {"firstName" "John", "lastName" "Doe", "age" 21}))))
+;(assert (not= true (m/validate my-schema (keywordize-keys {"firstName" "John", "lastName" 1, "age" 21}))))
+
 
 ;{:adapter/jetty {:port 8080, :handler #ig/ref :handler/greet}
 ; :handler/greet {:name "Alice"}}

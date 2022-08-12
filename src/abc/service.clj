@@ -6,7 +6,7 @@
 ; [malli.dev :as mdev]
 ; [malli.experimental :as mx]
 
-(def node (xt/start-node {}))
+;(def node (xt/start-node {}))
 
 ; https://docs.xtdb.com/language-reference/1.21.0/datalog-transactions/
 ; TODO: listen to event to ensure indexer has run to this trans?
@@ -26,21 +26,7 @@
    :in [n]}
  :Picasso)
 
-(.close node)
-
-; Experimental code from PR
-; https://github.com/metosin/malli/pull/211
-; Fork at hkupty:js-schema-to-malli
-(require '[clojure.walk :refer (keywordize-keys)])
-
-(def data )
-
-(def my-schema (schema->malli (keywordize-keys data)))
-(m/schema? my-schema)
-(m/form my-schema)
-(assert (= true (m/validate my-schema (keywordize-keys {"firstName" "John", "lastName" "Doe", "age" 21}))))
-
-(assert (not= true (m/validate my-schema (keywordize-keys {"firstName" "John", "lastName" 1, "age" 21}))))
+;(.close node)
 
 ; Schema validation as an interceptor?
 
