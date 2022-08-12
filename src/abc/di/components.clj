@@ -1,7 +1,9 @@
 (ns abc.di.components
   (:require [integrant.core :as ig]
             [clojure.java.io :as io]
+            [clojure.edn :as edn]
             [abc.lacinia :as lac]
+            [abc.server :as server]
             [com.walmartlabs.lacinia :refer [execute]]
             [xtdb.api :as xt]
             [clojure.data.json :as json]
@@ -18,11 +20,23 @@
 (defmethod ig/init-key :graphql/schema [_ {:keys [file]}]
   (lac/poc-schema file lac/resolvers))
 
-(defmethod ig/init-key :db [_ conf]
+(defmethod ig/init-key :db/node [_ conf]
   (xt/start-node conf))
 
-(defmethod ig/halt-key! :db [_ node]
+(defmethod ig/halt-key! :db/node [_ node]
   (.close node))
+
+; Be careful:
+; 1) slurp return string only - to parse, further process or use other fn
+; 2) ::name for namespaced keyword does auto-resolve - this obviously won't work in edn file, so be explicit there
+; 3) pedestal server start/stop need to be careful
+(defmethod ig/init-key :server [_ {:keys [base-conf db]}]
+  (let [base-conf (edn/read-string (slurp (io/resource (:file base-conf))))]
+    (println base-conf)
+    (server/create-and-start-server base-conf server/routes)))
+
+(defmethod ig/halt-key! :server [_ server]
+  (io.pedestal.http/stop server))
 
 ; Modified from:
 ; Experimental code from PR
@@ -56,4 +70,3 @@
 
 (execute (:graphql/schema system) 
          "{ hero { id name }}" nil nil)
-

@@ -1,0 +1,5 @@
+{:io.pedestal.http/type :jetty
+ :io.pedestal.http/port 3000
+ :io.pedestal.http/join? false
+;; no pedestal routes
+ :io.pedestal.http/routes []}

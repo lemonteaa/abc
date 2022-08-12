@@ -20,13 +20,13 @@
 ; TODO: graphiql asset relative path issue?
 (def routes
   ["/api"
-   ["/graphql-q" {:post {:interceptors [(p2/default-interceptors poc-schema nil)]}}]
-   ["/graphql-ide" {:get {:handler (p2/graphiql-ide-handler nil)}}]
+   ;["/graphql-q" {:post {:interceptors [(p2/default-interceptors poc-schema nil)]}}]
+   ;["/graphql-ide" {:get {:handler (p2/graphiql-ide-handler nil)}}]
 
-   ["/person"
-    {:post {:interceptors [(schema-validation-interceptor my-schema)]
-            :handler add-person}
-     :get  {:handler get-person}}]
+   ;["/person"
+   ; {:post {:interceptors [(schema-validation-interceptor my-schema)]
+   ;         :handler add-person}
+   ;  :get  {:handler get-person}}]
 
    ["/number"
     {:interceptors [(interceptor 10)]
@@ -47,16 +47,12 @@
 ;                       [ide-path :get (graphiql-ide-handler options) :route-name ::graphiql-ide]}
 ;                     (graphiql-asset-routes asset-path))
 
-(-> {::server/type :jetty
-     ::server/port 3000
-     ::server/join? false
-     ;; no pedestal routes
-     ::server/routes []}
+(defn create-and-start-server [base-conf routes]
+  (-> base-conf
     (server/default-interceptors)
     ;; swap the reitit router
     (pedestal/replace-last-interceptor
-      (pedestal/routing-interceptor
-        (http/router routes)))
+      (pedestal/routing-interceptor (http/router routes)))
     (server/dev-interceptors)
     (server/create-server)
-    (server/start))
+    (server/start)))

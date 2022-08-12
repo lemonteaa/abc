@@ -1,3 +1,5 @@
 {:graphql/schema {:file "lacinia-schema-sample.edn"}
- :db {}
- :api/schema {:person "schemas/person.json"}}
+ :db/node {}
+ :api/schema {:person "schemas/person.json"}
+ :server {:base-conf {:file "pedestal-base-conf.edn"}
+          :db #ig/ref :db/node}}
